@@ -1,0 +1,44 @@
+<!-- Evan Hiltzik -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Movie Recommendations!</title>
+        <meta charset="utf-8">
+    <style>
+        /* Place CSS here */
+    </style>
+
+    <script src="ChoiceData.js"></script>
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <h1 class = "title">Movie Recommendations</h1>
+            <label for="name">Please enter your name:</label>
+            <input type="text" id="name" name="name">
+
+            <br>
+
+            <input type="submit" value="Submit" onclick="validate();">
+            <p id="hello"></p>
+    
+            <p id="instructions">Click "Reset" to restart your selections and clear your recommendations. Click "Show My Recommendations!" when you've selected a genre, subgenre, and release decade!</p>
+            <hr>
+        </div>
+        
+        <p id="hello"></p> <!--this p tag should be generated too-->
+
+        <button onclick="reset();">Reset</button> 
+        <button onclick="readBack();">Show My Recommendations!</button>
+        
+        <div id="selectDiv"></div>
+
+            <h1 id="displayHead"></h1>
+            <h3 id="displayName"></h3>
+            <p id="displayText"></p>
+
+
+    </body>
+    <script src="script.js"></script>
+</html>
