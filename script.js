@@ -9,25 +9,25 @@ function $$(tag, index) {
 }
 
 var data = {
-        // accessor: [???, option1, opt2, opt3, ...]
-        // css: ['media/css/file.css', 'potentialOtherFileForOtherDataset.css'],
-        init: ['Select a Genre', '--choose one--','Horror', 'Action', 'Comedy'],
-        Horror: ['Choose a Horror Genre','--choose one--', 'Scifi', 'Zombie', 'Slasher'],
-        Action: ["Choose an Action Genre", '--choose one--',"Thriller", "Mystery", "Adventure"],
-        Comedy: ["Choose a Comedy Genre", '--choose one--',"Scary", "Romantic", "Exciting"],
+    // accessor: [???, option1, opt2, opt3, ...]
+    // css: ['media/css/file.css', 'potentialOtherFileForOtherDataset.css'],
+    init: ['Select a Genre', '--choose one--','Horror', 'Action', 'Comedy'],
+    Horror: ['Choose a Horror Genre','--choose one--', 'Scifi', 'Zombie', 'Slasher'],
+    Action: ["Choose an Action Genre", '--choose one--',"Thriller", "Mystery", "Adventure"],
+    Comedy: ["Choose a Comedy Genre", '--choose one--',"Scary", "Romantic", "Exciting"],
 
-        Scifi: ["Choose a Release Decade", '--choose one--',"(SF) 1990s", "(SF) 2000s", "(SF) 2010s"],
-        Zombie: ["Choose a Release Decade", '--choose one--',"(ZH) 1990s", "(ZH) 2000s", "(ZH) 2010s"],
-        Slasher: ["Choose a Release Decade", '--choose one--',"(SH) 1990s", "(SH) 2000s", "(SH) 2010s"],
+    Scifi: ["Choose a Release Decade", '--choose one--',"(SF) 1990s", "(SF) 2000s", "(SF) 2010s"],
+    Zombie: ["Choose a Release Decade", '--choose one--',"(ZH) 1990s", "(ZH) 2000s", "(ZH) 2010s"],
+    Slasher: ["Choose a Release Decade", '--choose one--',"(SH) 1990s", "(SH) 2000s", "(SH) 2010s"],
 
-        Thriller: ["Choose Thriller for Loop",'--choose one--', 'Thriller', "(TA) 1990s", "(TA) 2000s", "(TA) 2010s"],
-        Mystery: ["Choose a Release Decade",'--choose one--', "(MA) 1990s", "(MA) 2000s", "(MA) 2010s"],
-        Adventure: ["Choose a Release Decade", '--choose one--',"(AA) 1990s", "(AA) 2000s", "(AA) 2010s"],
+    Thriller: ["Choose Thriller for Loop",'--choose one--', 'Thriller', "(TA) 1990s", "(TA) 2000s", "(TA) 2010s"],
+    Mystery: ["Choose a Release Decade",'--choose one--', "(MA) 1990s", "(MA) 2000s", "(MA) 2010s"],
+    Adventure: ["Choose a Release Decade", '--choose one--',"(AA) 1990s", "(AA) 2000s", "(AA) 2010s"],
 
-        Scary: ["Choose a Release Decade", '--choose one--',"(SC) 1990s", "(SC) 2000s", "(SC) 2010s"],
-        Romantic: ["Choose a Release Decade", '--choose one--',"(RC) 1990s", "(RC) 2000s", "(RC) 2010s"],
-        Exciting: ["Choose a Release Decade", '--choose one--',"(EC) 1990s", "(EC) 2000s", "(EC) 2010s"]
-    }
+    Scary: ["Choose a Release Decade", '--choose one--',"(SC) 1990s", "(SC) 2000s", "(SC) 2010s"],
+    Romantic: ["Choose a Release Decade", '--choose one--',"(RC) 1990s", "(RC) 2000s", "(RC) 2010s"],
+    Exciting: ["Choose a Release Decade", '--choose one--',"(EC) 1990s", "(EC) 2000s", "(EC) 2010s"]
+}
 
 var results = {
     // Sci-fi Horror
@@ -162,7 +162,7 @@ function readBack() {
             document.body.appendChild(recsDiv);
         }
 
-        else {$('recsDiv').remove(); document.body.appendChild(recsDiv);}
+        else { $('recsDiv').remove(); document.body.appendChild(recsDiv); }
     }
 }
 
@@ -180,7 +180,7 @@ function collectSelections() {
 }
     
 // Validates user input from name
-function validate(){
+function validate() {
     var input = $('name').value;
     var letters = /^[A-Za-z]+$/;
 
@@ -190,7 +190,7 @@ function validate(){
 }
 
 // saveData saves form data to localStorage
-function saveData(){
+function saveData() {
     //get info
     let inputName = $("name");
 
