@@ -172,11 +172,17 @@ function collectSelections() {
     var stringHold = '';
 
     for (let i=0, len=$('selectDiv').getElementsByTagName('select').length; i<len; i++) {
-        stringHold += $('selectDiv').getElementsByTagName('select')[i].value + "|"
+        stringHold += $('selectDiv').getElementsByTagName('select')[i].value + " | "
     }
 
     stringHold = stringHold.substring(0, stringHold.length-1);
-    console.log(stringHold);
+    SetCookie('prevChoices', stringHold);
+
+    if (GetCookie('prevChoices')) {
+        console.log('cookie exists');
+    }
+
+    else { console.log('no prevChoices cookie'); }
 }
     
 // Validates user input from name
@@ -191,25 +197,80 @@ function validate() {
 
 // saveData saves form data to localStorage
 function saveData() {
-    //get info
-    let inputName = $("name");
-
-    //set local storage
-    localStorage.setItem("inputName", inputName.value);
-
-    //retrieve local storage
-    let name = localStorage.getItem("inputName");
-
-    //output
+    // get info
+    let givenName = $("name").value;
+    
+    let storedName = localStorage.getItem("userName");
+    console.log("name in storage:" + storedName);
+    
+    // set local storage
+    localStorage.setItem("userName", givenName);
+    
+    // retrieve local storage
     let hello = document.createElement('p');
     hello.setAttribute('id', 'hello');
 
-    let text = document.createTextNode("Hello, " + name + "!");
-    
-    hello.appendChild(text);
+    // and say 'hello, givenName!'
+    hello.appendChild(document.createTextNode("Hello, " + givenName + "!"));
 
-    $('heading').append(hello);
+    $('heading').appendChild(hello);
+    // output
     // how to prevent multiple appends if button has already been clicked?
+}
+
+function checkStorage() {
+    // checks if userName and rec data have been saved
+    // if they have, generates + dipslays text nodes containing them
+
+    // displays stored name from previous visits if exists
+    if (window.localStorage) {
+        if (localStorage.getItem('userName')) {
+            // been here before - post name to page
+            nameDiv = document.createElement('div');
+            nameDiv.setAttribute('id', 'nameDiv');
+
+            userName = localStorage.getItem('userName');
+            nameDiv.appendChild(document.createTextNode("Welcome back, " + userName + "!"));
+
+            $('heading').appendChild(nameDiv);
+        }
+    }
+    else { window.location = "legacy.html"; }
+
+    // display previously chosen options and recommendations if exist
+
+    // how to properly check if cookie exists?
+    // if cookie does not exist, how to use local storage instead?
+    // does this cookie qualify??
+    // how to only append "hello" text if input name different from stored name?
+    // what data to take from form?
+    // am I doing any of this local storage stuff right?
+    if (getCookieVal(2)) {
+        prevDiv = document.createElement('div');
+        prevDiv.setAttribute('id', 'prevDiv');
+
+        cookieText = getCookieVal(12);
+        cookieArr = cookieText.split(' | ');
+        
+        prevDiv.appendChild(document.createTextNode("Your previous selections were: " + getCookieVal(12) + "\n"));
+        prevDiv.appendChild(document.createTextNode("Your previous recommendations were: \n"));
+        
+        // this is supposed to take the previously chosen key and
+        // repost the recommendations using it, how can I get this working?
+        prevFinalChoice = cookieArr[cookieArr.length-1];
+        console.log(prevFinalChoice);
+        recs = results[prevFinalChoice];
+
+        // iteratively display recs using finalChoice as key
+        for (var i=0, len=recs.length; i<len; i++) {
+            prevDiv.appendChild(document.createTextNode(recs[i]));
+            prevDiv.append("\n");
+        }
+
+        prevDiv.appendChild(prevSelects);
+
+        $('heading').appendChild(prevDiv);
+    }
 }
 
 // getRecs uses the final select choice
@@ -219,7 +280,7 @@ function getRecs(key) {
 
     var text = $("displayText");
     var name = $("displayName");
-    var userName = localStorage.getItem("inputName");
+    var userName = localStorage.getItem("userName");
 
         for (let i = 0; i <= recInfo.length; i++) {
             if (recInfo[i].key == key) {
@@ -227,11 +288,59 @@ function getRecs(key) {
                 // set text of tags using data
                 name.appendChild(document.createTextNode("Here are your recommendations, " + userName + ". Enjoy!"));
 
-                var data = recInfo[i].text;
-                text.append(data);
-
+                var data = document.createTextNode(recInfo[i].text);
+                text.appendChild(data);
             }
         }
     // let nameEle = document.createElement('p');
     // nameEle.setAttribute('class', 'nameP');    
 }
+
+// BEGIN STORAGE FUNCTIONS
+
+function getCookieVal (offset) {
+	var endstr = document.cookie.indexOf (";", offset);
+	if (endstr == -1) { endstr = document.cookie.length; }
+		return unescape(document.cookie.substring(offset, endstr));
+	}
+
+function GetCookie (name) {
+	var arg = name + "=";
+	var alen = arg.length;
+	var clen = document.cookie.length;
+	var i = 0;
+	while (i < clen) {
+		var j = i + alen;
+		if (document.cookie.substring(i, j) == arg) {
+			return getCookieVal (j);
+			}
+		i = document.cookie.indexOf(" ", i) + 1;
+		if (i == 0) break; 
+		}
+	return null;
+	}
+
+    
+    /////////
+    // use:
+    //		SetCookie('name', 'value', 3000);
+    //		SetCookie('name', 'value', 1000,false,false,false,true);
+    //		If set the secure (last arg) to true, you MUST be on an https connection!
+    /////////
+function SetCookie (name,value,maxAge,path,domain,sameSite,secure) {
+      document.cookie = name + "=" + escape (value) +
+        ((maxAge) ? ";max-age=" + maxAge  : "") +
+        ((path) ? ";path=" + path  : "") +
+        ((domain) ? ";domain=" + domain : "") +
+        ((sameSite) ? ";samesite=" + sameSite : ";samesite=strict") +
+        ((secure) ? ";secure;" : ";");
+    }
+
+function DeleteCookie (name,path,domain) {
+	if (GetCookie(name)) {
+		document.cookie = name + "=" +
+		((path) ? "; path=" + path : "") +
+		((domain) ? "; domain=" + domain : "") +
+		"; expires=Thu, 01-Jan-70 00:00:01 GMT";
+		}
+	}
