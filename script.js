@@ -41,7 +41,7 @@ var results = {
     '(ZH) 2010s': ["World War Z (2013)","Train to Busan (2016)","Zombieland: Double Tap (2019)","The Cabin in the Woods (2012)"],
 
     // Slasher Horror
-    '(SH) 1990s': ["Scream (1996)","Candyman (1992)","I Know What you did last summer (1997)","Bride of Chucky (1998)"],
+    '(SH) 1990s': ["Scream (1996)","Candyman (1992)","I Know What You Did Last Summer (1997)","Bride of Chucky (1998)"],
     '(SH) 2000s': ["Trick 'r Treat (2007)","Halloween (2007)","Freddy vs Jason (2003)","Identity (2003)"],
     '(SH) 2010s': ["Green Room (2015)","Happy Death Day (2017)","It Follows (2014)","Haunt (2019)"],
 
@@ -115,6 +115,8 @@ function build(dom) {
     }
     else {
         // no data left - create form!
+        readBack();
+        collectSelections();
         generateForm();
         console.log('done!');
     }
@@ -124,12 +126,55 @@ function build(dom) {
 // generateForm generates a form, whose input
 // is saved to localStorage for autofill later
 function generateForm() {
+    // form attributes
     let formDiv = document.createElement('div');
-    let finalForm = document.createElement('input');
-    finalForm.type = "text";
-    finalForm.id = 'firstName';
-    finalForm.setAttribute('required', true);
-    $('body').appendChild(formDiv);
+    let finalForm = document.createElement('form');
+    console.log('setting onsubmit attribute');
+    // finalForm.setAttribute('onsubmit', "return validate()");
+    finalForm.addEventListener('submit', function(){validate()});
+    console.log('just set the onsubmit attribute');
+    formDiv.id = 'formDiv';
+
+    // inputs and their attributes
+    let nameLabel = document.createElement('label');
+    nameLabel.for = 'nameLabel';
+    nameLabel.appendChild(document.createTextNode('Name: '));
+
+    let nameInput = document.createElement('input');
+    nameInput.id = 'nameInput';
+    nameInput.type = 'text';
+    nameInput.name = 'name';
+    nameInput.setAttribute('required', true);
+
+    let emailLabel = document.createElement('label');
+    emailLabel.for = 'emailInput';
+    emailLabel.appendChild(document.createTextNode('Email: '))
+
+    let emailInput = document.createElement('input');
+    emailInput.id = 'emailInput';
+    emailInput.type = 'email';
+    emailInput.name = 'email';
+    emailInput.setAttribute('required', true);
+
+    let submit = document.createElement('input');
+    submit.type = 'submit';
+    submit.value = 'Submit';
+
+    // final appends
+    finalForm.appendChild(nameLabel);
+    finalForm.appendChild(nameInput);
+
+    finalForm.appendChild(document.createElement('br'));
+
+    finalForm.appendChild(emailLabel);
+    finalForm.appendChild(emailInput);
+
+    finalForm.appendChild(document.createElement('br'));
+    
+    finalForm.appendChild(submit);
+
+    formDiv.appendChild(finalForm);
+    $('columns').appendChild(formDiv);
 }
 
 // readBack reads back the recommendations
@@ -143,26 +188,33 @@ function readBack() {
     }
 
     else {
+
+        recsHeader = document.createElement('h2');
+        recsHeader.appendChild(document.createTextNode('Here are your recommendations!'));
+
         var finalChoice = $('selectDiv').lastChild.lastChild.value;
         console.log("final choice: " + finalChoice);
 
         var recs = results[finalChoice]
 
         recsDiv = document.createElement('div');
-        recsDiv.setAttribute('id', 'recs');
+        recsDiv.setAttribute('id', 'recsDiv');
 
+        recsDiv.appendChild(recsHeader);
         // iteratively display recs using finalChoice as key
         for (var i=0, len=recs.length; i<len; i++) {
-            console.log("index is " + i + " and value is " + recs[i]);
             recsDiv.appendChild(document.createTextNode(recs[i]));
-            recsDiv.append("\n");
+            recsDiv.appendChild(document.createElement('br'));
         }
 
         if (!$('recsDiv')) {
-            document.body.appendChild(recsDiv);
+            $$('body', 0).appendChild(recsDiv);
         }
 
-        else { $('recsDiv').remove(); document.body.appendChild(recsDiv); }
+        else { 
+            $('recsDiv').remove(); 
+            document.body.appendChild(recsDiv); 
+        }
     }
 }
 
@@ -172,48 +224,53 @@ function collectSelections() {
     var stringHold = '';
 
     for (let i=0, len=$('selectDiv').getElementsByTagName('select').length; i<len; i++) {
-        stringHold += $('selectDiv').getElementsByTagName('select')[i].value + " | "
+        stringHold += $('selectDiv').getElementsByTagName('select')[i].value + "|"
     }
 
-    stringHold = stringHold.substring(0, stringHold.length-1);
-    SetCookie('prevChoices', stringHold);
-
-    if (GetCookie('prevChoices')) {
-        console.log('cookie exists');
+    if ($('selectDiv').getElementsByTagName('select').length >= 3) {
+        stringHold = stringHold.substring(0, stringHold.length-1);
+        SetCookie('prevChoices', stringHold);
     }
-
-    else { console.log('no prevChoices cookie'); }
 }
     
 // Validates user input from name
 function validate() {
-    var input = $('name').value;
-    var letters = /^[A-Za-z]+$/;
+    console.log('beginning of validation!');
+    var name = $('nameInput').value;
+    var nameRegex = /^[A-Za-z]+$/;
 
-    if(input.length == 0 || !input.match(letters)) {
+    var email = $('emailInput').value;
+    var emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+    if(name.length == 0 || !name.match(nameRegex)) {
         alert("Please enter a name!");
+    } 
+
+    else if (email.length == 0 || !email.match(emailRegex)) {
+        alert("Please enter an email!");
     } else { saveData(); }
 }
 
 // saveData saves form data to localStorage
 function saveData() {
+    console.log('saveData begin!');
     // get info
-    let givenName = $("name").value;
+    let givenName = $("nameInput").value;
+    let givenEmail = $('emailInput').value;
     
     let storedName = localStorage.getItem("userName");
     console.log("name in storage:" + storedName);
+
+    let storedEmail = localStorage.getItem('userEmail');
+    console.log('email in storage:' + storedEmail);
     
     // set local storage
+    console.log('right before setting localStorage!');
     localStorage.setItem("userName", givenName);
+    localStorage.setItem('userEmail', givenEmail);
     
-    // retrieve local storage
     let hello = document.createElement('p');
     hello.setAttribute('id', 'hello');
-
-    // and say 'hello, givenName!'
-    hello.appendChild(document.createTextNode("Hello, " + givenName + "!"));
-
-    $('heading').appendChild(hello);
     // output
     // how to prevent multiple appends if button has already been clicked?
 }
@@ -224,15 +281,18 @@ function checkStorage() {
 
     // displays stored name from previous visits if exists
     if (window.localStorage) {
+        console.log('localStorage detected!')
         if (localStorage.getItem('userName')) {
             // been here before - post name to page
             nameDiv = document.createElement('div');
             nameDiv.setAttribute('id', 'nameDiv');
 
             userName = localStorage.getItem('userName');
-            nameDiv.appendChild(document.createTextNode("Welcome back, " + userName + "!"));
-
+            userEmail = localStorage.getItem('userEmail');
+            nameDiv.appendChild(document.createTextNode("Welcome back, " + userName + " (" + userEmail + ")!"));
+            
             $('heading').appendChild(nameDiv);
+            console.log('after welcome back append!');
         }
     }
     else { window.location = "legacy.html"; }
@@ -245,63 +305,39 @@ function checkStorage() {
     // how to only append "hello" text if input name different from stored name?
     // what data to take from form?
     // am I doing any of this local storage stuff right?
-    if (getCookieVal(2)) {
+    if (GetCookie('prevChoices')) {
         prevDiv = document.createElement('div');
         prevDiv.setAttribute('id', 'prevDiv');
 
         cookieText = getCookieVal(12);
-        cookieArr = cookieText.split(' | ');
+        cookieArr = cookieText.split('|');
         
-        prevDiv.appendChild(document.createTextNode("Your previous selections were: " + getCookieVal(12) + "\n"));
-        prevDiv.appendChild(document.createTextNode("Your previous recommendations were: \n"));
+        prevDiv.appendChild(document.createTextNode("Your previous selections were: " + getCookieVal(12)));
+        prevDiv.appendChild(document.createElement('br'));
+
+        prevDiv.appendChild(document.createTextNode("Your previous recommendations were:"));
+        prevDiv.appendChild(document.createElement('br'));
         
         // this is supposed to take the previously chosen key and
         // repost the recommendations using it, how can I get this working?
         prevFinalChoice = cookieArr[cookieArr.length-1];
-        console.log(prevFinalChoice);
-        recs = results[prevFinalChoice];
+        prevRecs = results[prevFinalChoice];
 
         // iteratively display recs using finalChoice as key
-        for (var i=0, len=recs.length; i<len; i++) {
-            prevDiv.appendChild(document.createTextNode(recs[i]));
-            prevDiv.append("\n");
+        for (var i=0, len=prevRecs.length; i<len; i++) {
+            prevDiv.appendChild(document.createTextNode(prevRecs[i]));
+            prevDiv.appendChild(document.createElement('br'));
         }
-
-        prevDiv.appendChild(prevSelects);
 
         $('heading').appendChild(prevDiv);
     }
 }
 
-// getRecs uses the final select choice
-// as a key for the movie recommendation
-// array in ChoiceData.js
-function getRecs(key) {
-
-    var text = $("displayText");
-    var name = $("displayName");
-    var userName = localStorage.getItem("userName");
-
-        for (let i = 0; i <= recInfo.length; i++) {
-            if (recInfo[i].key == key) {
-
-                // set text of tags using data
-                name.appendChild(document.createTextNode("Here are your recommendations, " + userName + ". Enjoy!"));
-
-                var data = document.createTextNode(recInfo[i].text);
-                text.appendChild(data);
-            }
-        }
-    // let nameEle = document.createElement('p');
-    // nameEle.setAttribute('class', 'nameP');    
-}
-
-// BEGIN STORAGE FUNCTIONS
-
+// cookie functions
 function getCookieVal (offset) {
 	var endstr = document.cookie.indexOf (";", offset);
 	if (endstr == -1) { endstr = document.cookie.length; }
-		return unescape(document.cookie.substring(offset, endstr));
+	return unescape(document.cookie.substring(offset, endstr));
 	}
 
 function GetCookie (name) {
@@ -310,12 +346,14 @@ function GetCookie (name) {
 	var clen = document.cookie.length;
 	var i = 0;
 	while (i < clen) {
-		var j = i + alen;
-		if (document.cookie.substring(i, j) == arg) {
-			return getCookieVal (j);
-			}
-		i = document.cookie.indexOf(" ", i) + 1;
-		if (i == 0) break; 
+            var j = i + alen;
+            if (document.cookie.substring(i, j) == arg) {
+                return getCookieVal (j);
+            }
+            
+            i = document.cookie.indexOf(" ", i) + 1;
+            
+            if (i == 0) break; 
 		}
 	return null;
 	}

@@ -18,27 +18,19 @@
     </head>
 
     <body onload="build('init'); checkStorage();">
-        <div id="heading">
-            <h1 class = "title">Movie Recommendations</h1>
-            <label for="name">Please enter your name:</label>
-            <input type="text" id="name" name="name">
-
-            <input type="submit" value="Submit" onclick="validate();">
-                
-            <p id="instructions">Click "Show My Recommendations!" when you've selected a genre, subgenre, and release decade!</p>
-            <button onclick="readBack(); collectSelections();">Show My Recommendations!</button>
-
-            </div>
-            <hr>
         
-        <div id="wrapper">
-            <div id="selectDiv"></div>
-        </div>
+            <div id="heading">
+                <h1 class = "title">Movie Recommendations</h1>
+                <p id="instructions">Select a movie genre, subgenre, and release decade - we'll recommend some movies for you!</p>
+            </div>
 
-            <h1 id="displayHead"></h1>
-            <h3 id="displayName"></h3>
-            <p id="displayText"></p>
+            <hr>
+            
+            <div id="columns">
+                <div id="wrapper">
+                    <div id="selectDiv"></div>
+                </div>
+            </div>
 
     </body>
-    <!-- <script src="script.js"></script> -->
 </html>
