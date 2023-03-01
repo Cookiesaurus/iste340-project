@@ -1,4 +1,6 @@
 // Evan Hiltzik
+// ISTE 340 Client Programming
+// Project 1
 
 function $(id) {
     return document.getElementById(id);
@@ -118,7 +120,6 @@ function build(dom) {
         readBack();
         collectSelections();
         generateForm();
-        console.log('done!');
     }
     
 }
@@ -129,10 +130,7 @@ function generateForm() {
     // form attributes
     let formDiv = document.createElement('div');
     let finalForm = document.createElement('form');
-    console.log('setting onsubmit attribute');
-    // finalForm.setAttribute('onsubmit', "return validate()");
     finalForm.addEventListener('submit', function(){validate()});
-    console.log('just set the onsubmit attribute');
     formDiv.id = 'formDiv';
 
     // inputs and their attributes
@@ -193,7 +191,6 @@ function readBack() {
         recsHeader.appendChild(document.createTextNode('Here are your recommendations!'));
 
         var finalChoice = $('selectDiv').lastChild.lastChild.value;
-        console.log("final choice: " + finalChoice);
 
         var recs = results[finalChoice]
 
@@ -235,7 +232,6 @@ function collectSelections() {
     
 // Validates user input from name
 function validate() {
-    console.log('beginning of validation!');
     var name = $('nameInput').value;
     var nameRegex = /^[A-Za-z]+$/;
 
@@ -253,26 +249,17 @@ function validate() {
 
 // saveData saves form data to localStorage
 function saveData() {
-    console.log('saveData begin!');
     // get info
     let givenName = $("nameInput").value;
     let givenEmail = $('emailInput').value;
     
-    let storedName = localStorage.getItem("userName");
-    console.log("name in storage:" + storedName);
-
-    let storedEmail = localStorage.getItem('userEmail');
-    console.log('email in storage:' + storedEmail);
-    
     // set local storage
-    console.log('right before setting localStorage!');
     localStorage.setItem("userName", givenName);
     localStorage.setItem('userEmail', givenEmail);
     
     let hello = document.createElement('p');
     hello.setAttribute('id', 'hello');
     // output
-    // how to prevent multiple appends if button has already been clicked?
 }
 
 function checkStorage() {
@@ -281,7 +268,6 @@ function checkStorage() {
 
     // displays stored name from previous visits if exists
     if (window.localStorage) {
-        console.log('localStorage detected!')
         if (localStorage.getItem('userName')) {
             // been here before - post name to page
             nameDiv = document.createElement('div');
@@ -291,20 +277,12 @@ function checkStorage() {
             userEmail = localStorage.getItem('userEmail');
             nameDiv.appendChild(document.createTextNode("Welcome back, " + userName + " (" + userEmail + ")!"));
             
-            $('heading').appendChild(nameDiv);
-            console.log('after welcome back append!');
+            $('weba').appendChild(nameDiv);
         }
     }
     else { window.location = "legacy.html"; }
 
     // display previously chosen options and recommendations if exist
-
-    // how to properly check if cookie exists?
-    // if cookie does not exist, how to use local storage instead?
-    // does this cookie qualify??
-    // how to only append "hello" text if input name different from stored name?
-    // what data to take from form?
-    // am I doing any of this local storage stuff right?
     if (GetCookie('prevChoices')) {
         prevDiv = document.createElement('div');
         prevDiv.setAttribute('id', 'prevDiv');
@@ -318,12 +296,10 @@ function checkStorage() {
         prevDiv.appendChild(document.createTextNode("Your previous recommendations were:"));
         prevDiv.appendChild(document.createElement('br'));
         
-        // this is supposed to take the previously chosen key and
-        // repost the recommendations using it, how can I get this working?
+        // iteratively display previous recs using finalChoice as key
         prevFinalChoice = cookieArr[cookieArr.length-1];
         prevRecs = results[prevFinalChoice];
 
-        // iteratively display recs using finalChoice as key
         for (var i=0, len=prevRecs.length; i<len; i++) {
             prevDiv.appendChild(document.createTextNode(prevRecs[i]));
             prevDiv.appendChild(document.createElement('br'));
