@@ -7,20 +7,43 @@ body {
     text-align: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin:20px;
-    background-color: antiquewhite;
+    background-color: rgb(253, 225, 190);
 }
 
-#columns {
-    display: flex;
+.selection {
+    width: 300px;
+    text-align: center;
+    position:relative;
+    padding:10px;
+    margin:auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: rgb(255, 199, 151);
+
+    animation: fadeIn 1s;
+    -webkit-animation: fadeIn 1s;
+    -moz-animation: fadeIn 1s;
+    -o-animation: fadeIn 1s;
+    -ms-animation: fadeIn 1s;
 }
 
-
-#formDiv {
-    background-color: aquamarine;
+#prevDiv {
+    background-color: rgb(255, 210, 155);
     border-radius: 15px;
     position: relative;
     padding: 15px;
-    margin: 8px;
+    margin: auto;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    max-width: fit-content;
+}
+
+#formDiv {
+    width: 350px;
+    background-color: rgb(255, 244, 158);
+    border-radius: 15px;
+    position: relative;
+    padding: 15px;
+    margin: auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     line-height: 30px;
 
@@ -32,11 +55,12 @@ body {
 }
 
 #recsDiv {
-    background-color: aquamarine;
+    width:400px;
+    background-color: rgb(255, 255, 163);
     border-radius: 15px;
     position: relative;
     padding: 15px;
-    margin: 8px;
+    margin: auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     line-height: 30px;
 
@@ -49,26 +73,11 @@ body {
 
 #wrapper {
     text-align:center;
-    display: flexbox;
-    flex-direction: row;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.selection {
-    width: 300px;
-    text-align: center;
-    position:relative;
-    padding:15px;
-    margin:8px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background-color: wheat;
-
-    animation: fadeIn 1s;
-    -webkit-animation: fadeIn 1s;
-    -moz-animation: fadeIn 1s;
-    -o-animation: fadeIn 1s;
-    -ms-animation: fadeIn 1s;
-}
 
 @keyframes fadeIn {
     0% {opacity: 0;}
